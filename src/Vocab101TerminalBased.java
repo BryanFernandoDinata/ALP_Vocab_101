@@ -12,7 +12,7 @@ public class Vocab101TerminalBased
     static Random r = new Random();
 
     static String urlString = "https://api.api-ninjas.com/v1/dictionary?word=";
-    final static String apiKey = "wduaakTTOQAnYqECqJlacg==5UKQTaX2IDiNeSZC"; // Replace with your actual API key
+    final static String apiKey = "wduaakTTOQAnYqECqJlacg==5UKQTaX2IDiNeSZC"; 
     static JSONParser parser = new JSONParser();
     static JSONObject randomWordObject;
 
@@ -37,9 +37,7 @@ public class Vocab101TerminalBased
     static ArrayList<String> vocabulariesThatIsTypedRightDescription = new ArrayList<String>(); 
     static ArrayList<String> vocabulariesThatIsGuessedRight = new ArrayList<String>(); // vocabularies yang sudah di tebak dari definisinya bener saat quiz
 
-    //Path path = Paths.get("output.txt"); // this is for deleting the file
     static String filePath = "discoveredVocabs.txt";
-    //int shouldDelete = 0;
     
         
     public static void main(String[] args) throws ParseException, IOException
@@ -176,17 +174,33 @@ public class Vocab101TerminalBased
             //System.out.println(definition);
             if (definition != null && !definition.isEmpty()) 
             {
-                definitions = definition.split("\\d+\\.");
-                if (definitions.length > 1) 
+                if(definition.charAt(0) == '1')
                 {
-                    //String[] firstDefinition = definitions[0].split(";");
-                    System.out.println(definitions[1]);
-                    discoveredVocabulariesDescription.add(definitions[1]);
-                } else 
+                    definitions = definition.split("\\d+\\.");
+                    if (definitions.length > 1) 
+                    {
+                        //String[] firstDefinition = definitions[0].split(";");
+                        System.out.println(definitions[1]);
+                        discoveredVocabulariesDescription.add(definitions[1]);
+                    } else 
+                    {
+                        System.out.println("No definitions available for this word or the format is unexpected.");
+                    }
+                    vocabulariesThatIsTypedRightDescription.add(definitions[1]);
+                }else
                 {
-                    System.out.println("No definitions available for this word or the format is unexpected.");
+                    definitions = definition.split(";");
+                    if (definitions.length > 1) 
+                    {
+                        //String[] firstDefinition = definitions[0].split(";");
+                        System.out.println(definitions[0]);
+                        discoveredVocabulariesDescription.add(definitions[0]);
+                    } else 
+                    {
+                        System.out.println("No definitions available for this word or the format is unexpected.");
+                    }
+                    vocabulariesThatIsTypedRightDescription.add(definitions[0]);
                 }
-                vocabulariesThatIsTypedRightDescription.add(definitions[1]);
             }
         } else 
         {
@@ -332,7 +346,7 @@ public class Vocab101TerminalBased
         } 
         catch (FileNotFoundException e) 
         {
-            System.out.println(" You haven't learned any vocabulary");
+            
         }
     }
     public static void Quiz()
