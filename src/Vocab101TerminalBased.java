@@ -32,8 +32,10 @@ public class Vocab101TerminalBased
     //quizz
     static ArrayList<String> discoveredVocabularies = new ArrayList<String>(); // vocabularies yang sudah di spell right
     static ArrayList<String> discoveredVocabulariesDescription = new ArrayList<String>();
+
+    static ArrayList<String> vocabulariesThatIsTypedRight = new ArrayList<String>(); 
+    static ArrayList<String> vocabulariesThatIsTypedRightDescription = new ArrayList<String>(); 
     static ArrayList<String> vocabulariesThatIsGuessedRight = new ArrayList<String>(); // vocabularies yang sudah di tebak dari definisinya bener saat quiz
-    static ArrayList<String> vocabulariesThatIsGuessedWrong = new ArrayList<String>();
 
     //Path path = Paths.get("output.txt"); // this is for deleting the file
     static String filePath = "discoveredVocabs.txt";
@@ -76,6 +78,7 @@ public class Vocab101TerminalBased
 
                         if(i == 4)
                         {
+                            Quiz();
                             do
                             {
                                 System.out.print("Play again ? (Y/N) : ");
@@ -86,7 +89,6 @@ public class Vocab101TerminalBased
                             if(playAgain == 'N' || playAgain == 'n')
                             {
                                 SaveToDictionary();
-                                Quiz();
                             }
                         }
                     }
@@ -117,6 +119,7 @@ public class Vocab101TerminalBased
         {
             PrintVocabDescription();
             discoveredVocabularies.add(vocabularies[randomVocabIndex]); 
+            vocabulariesThatIsTypedRight.add(vocabularies[randomVocabIndex]);
         }
     }
     public static void PrintMainMenu()
@@ -183,6 +186,7 @@ public class Vocab101TerminalBased
                 {
                     System.out.println("No definitions available for this word or the format is unexpected.");
                 }
+                vocabulariesThatIsTypedRightDescription.add(definition);
             }
         } else 
         {
@@ -213,10 +217,6 @@ public class Vocab101TerminalBased
             e.printStackTrace();
         }
     }
-    public static void ResetDictionaries()
-    {
-
-    }
     public static void SaveToDictionary()
     {
         discoveredVocabularies.add(vocabularies[randomVocabIndex]);
@@ -233,7 +233,6 @@ public class Vocab101TerminalBased
                 {
                     writer.write(discoveredVocabularies.get(i));//+
                 }
-                //writer.newLine();  // Writes a new line after each string
             }
             System.out.println("Data successfully written to " + filePath);
         } 
@@ -248,13 +247,12 @@ public class Vocab101TerminalBased
             {
                 if(i < (discoveredVocabulariesDescription.size() - 2))
                 {
-                    writer.write(discoveredVocabulariesDescription.get(i) + ":");//+
+                    writer.write(discoveredVocabulariesDescription.get(i) + ":");
                 }
                 else
                 {
-                    writer.write(discoveredVocabulariesDescription.get(i));//+
+                    writer.write(discoveredVocabulariesDescription.get(i));
                 }
-                //writer.newLine();  // Writes a new line after each string
             }
             System.out.println("Data successfully written to " + "discoveredVocabDescription.txt");
         } 
@@ -279,7 +277,6 @@ public class Vocab101TerminalBased
             while (myReader.hasNextLine()) 
             {
                 data = myReader.nextLine();
-                //System.out.println(data);
             }
             while (myReader2.hasNextLine()) 
             {
@@ -292,8 +289,6 @@ public class Vocab101TerminalBased
         } 
         catch (FileNotFoundException e) 
         {
-            // System.out.println("An error occurred.");
-            // e.printStackTrace();
             System.out.println(" You haven't learned any vocabulary");
         }
         for(int i = 0; i < vocabulariesDescriptionLoaded.length - 1; i++)
@@ -301,7 +296,6 @@ public class Vocab101TerminalBased
             System.out.println(" Vocab : " + vocabulariesDiscoveredLoaded[i]);
             System.out.println(" " + vocabulariesDescriptionLoaded[i]);
         }
-        //System.out.println(Arrays.toString(vocabulariesDescriptionLoaded));
     }
     public static void LoadVocabAndDescriptionWithoutPrinting()
     {
@@ -328,6 +322,7 @@ public class Vocab101TerminalBased
 
             vocabulariesDescriptionLoaded = data.split(":");
             vocabulariesDiscoveredLoaded = data2.split(",");
+
             for(int i = 0; i < vocabulariesDescriptionLoaded.length - 1; i++)
             {
                 discoveredVocabularies.add(vocabulariesDiscoveredLoaded[i]);
@@ -337,21 +332,19 @@ public class Vocab101TerminalBased
         } 
         catch (FileNotFoundException e) 
         {
-            // System.out.println("An error occurred.");
-            // e.printStackTrace();
             System.out.println(" You haven't learned any vocabulary");
         }
     }
     public static void Quiz()
     {
-        LoadFromDictionary();
-        for(int i = 0; i < 4; i++)
+        String theAns = "";
+        for(int i = 0; i < vocabulariesThatIsTypedRight.size(); i++)
         {
-            System.out.println(vocabulariesDescriptionLoaded[i]);
-            if(i == 4)
+            do
             {
-                
-            }
+                System.out.print(vocabulariesThatIsTypedRightDescription.get(i) + " : ");
+                theAns = s.next() + s.nextLine();
+            }while(!theAns.equalsIgnoreCase(vocabulariesThatIsTypedRight.get(i)));
         }
     }
 }
