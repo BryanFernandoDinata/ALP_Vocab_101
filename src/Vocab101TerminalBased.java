@@ -186,7 +186,7 @@ public class Vocab101TerminalBased
                 {
                     System.out.println("No definitions available for this word or the format is unexpected.");
                 }
-                vocabulariesThatIsTypedRightDescription.add(definition);
+                vocabulariesThatIsTypedRightDescription.add(definitions[1]);
             }
         } else 
         {
@@ -337,14 +337,37 @@ public class Vocab101TerminalBased
     }
     public static void Quiz()
     {
+        PrintQuizMenu();
+
         String theAns = "";
+       
         for(int i = 0; i < vocabulariesThatIsTypedRight.size(); i++)
         {
             do
             {
-                System.out.print(vocabulariesThatIsTypedRightDescription.get(i) + " : ");
+                System.out.print((i+1) + ". Definition : ");
+                System.out.println(vocabulariesThatIsTypedRightDescription.get(i));
+                System.out.println();
+
+                System.out.println("What is the vocabulary that has that description?");
+                System.out.print("Your answer : ");
                 theAns = s.next() + s.nextLine();
             }while(!theAns.equalsIgnoreCase(vocabulariesThatIsTypedRight.get(i)));
         }
+    }
+    public static void PrintQuizMenu()
+    {
+        System.out.println();
+
+        System.out.println(
+            " ██████╗ ██╗   ██╗██╗███████╗\r\n" + //
+            "██╔═══██╗██║   ██║██║╚══███╔╝\r\n" + //
+            "██║   ██║██║   ██║██║  ███╔╝ \r\n" + //
+            "██║▄▄ ██║██║   ██║██║ ███╔╝  \r\n" + //
+            "╚██████╔╝╚██████╔╝██║███████╗\r\n" + //
+            " ╚══▀▀═╝  ╚═════╝ ╚═╝╚══════╝"
+        );
+
+        System.out.println();
     }
 }
