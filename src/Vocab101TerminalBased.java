@@ -184,20 +184,20 @@ public class Vocab101TerminalBased
                         discoveredVocabulariesDescription.add(definitions[1]);
                     } else 
                     {
-                        System.out.println("No definitions available for this word or the format is unexpected.");
+                        System.out.println("No definitions available for this word");
                     }
                     vocabulariesThatIsTypedRightDescription.add(definitions[1]);
                 }else
                 {
                     definitions = definition.split(";");
-                    if (definitions.length > 1) 
+                    if (definitions.length >= 0) 
                     {
                         //String[] firstDefinition = definitions[0].split(";");
                         System.out.println(definitions[0]);
                         discoveredVocabulariesDescription.add(definitions[0]);
                     } else 
                     {
-                        System.out.println("No definitions available for this word or the format is unexpected.");
+                        System.out.println("No definitions available for this word");
                     }
                     vocabulariesThatIsTypedRightDescription.add(definitions[0]);
                 }
