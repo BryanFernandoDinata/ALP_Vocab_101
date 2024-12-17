@@ -354,7 +354,7 @@ public class Vocab101TerminalBased
         PrintQuizMenu();
 
         String theAns = "";
-       
+
         for(int i = 0; i < vocabulariesThatIsTypedRight.size(); i++)
         {
             do
