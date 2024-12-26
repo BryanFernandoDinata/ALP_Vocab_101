@@ -17,8 +17,8 @@ public class Vocab101TerminalBased
     static JSONObject randomWordObject;
 
     static String[] vocabularies;
-    static String[] vocabulariesDescriptionLoaded = {};
-    static String[] vocabulariesDiscoveredLoaded = {};
+    static String[] vocabulariesDescriptionLoaded;
+    static String[] vocabulariesDiscoveredLoaded;
     static String[] definitions = new String[99999];
     static String whatPlayerType;
 
@@ -140,7 +140,19 @@ public class Vocab101TerminalBased
     public static void PrintRandomizedVocab()
     {
         System.out.println();
-        randomVocabIndex = r.nextInt(vocabularies.length);
+        if(vocabulariesDiscoveredLoaded != null)
+        {       
+            for(int i = 0; i < vocabulariesDiscoveredLoaded.length - 1; i++)
+            {
+                do
+                {   
+                    randomVocabIndex = r.nextInt(vocabularies.length);
+                }while(vocabularies[randomVocabIndex].equalsIgnoreCase(vocabulariesDiscoveredLoaded[i]));
+            }
+        }else
+        {
+            randomVocabIndex = r.nextInt(vocabularies.length);
+        }
         System.out.println("New Vocabulary : " + vocabularies[randomVocabIndex]);
     }
     public static void PrintVocabDescription() throws ParseException, IOException 
@@ -180,6 +192,9 @@ public class Vocab101TerminalBased
                     if (definitions.length > 1) 
                     {
                         //String[] firstDefinition = definitions[0].split(";");
+                        definitions[1].replace("\n", "").replace("\r", "");
+                        definitions[1].replace("\n1", "").replace("\r", "");
+                        definitions[1].replace("\na", "").replace("\r", "");
                         System.out.println(definitions[1]);
                         discoveredVocabulariesDescription.add(definitions[1]);
                     } else 
@@ -193,14 +208,24 @@ public class Vocab101TerminalBased
                     if (definitions.length >= 0) 
                     {
                         //String[] firstDefinition = definitions[0].split(";");
+                        definitions[0].replace("\n", "").replace("\r", "");
+                        definitions[0].replace("\n1", "").replace("\r", "");
+                        definitions[0].replace("\nA", "").replace("\r", "");
                         System.out.println(definitions[0]);
                         discoveredVocabulariesDescription.add(definitions[0]);
+                        System.out.println("Added definitions for " + vocabularies[randomVocabIndex]);
                     } else 
                     {
                         System.out.println("No definitions available for this word");
                     }
-                    vocabulariesThatIsTypedRightDescription.add(definitions[0]);
+                    vocabulariesThatIsTypedRightDescription.add(vocabularies[randomVocabIndex] + " has not been registered to the API");
+                    discoveredVocabulariesDescription.add(vocabularies[randomVocabIndex] + "has not been registered to the API");
+                    System.out.println("Added definitions for " + vocabularies[randomVocabIndex]);
                 }
+            }
+            if(definition.equalsIgnoreCase(""))
+            {
+                System.out.println("No definitions available for this word");
             }
         } else 
         {
@@ -257,9 +282,9 @@ public class Vocab101TerminalBased
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("discoveredVocabDescription.txt"))) 
         {
-            for(int i = 0; i < discoveredVocabulariesDescription.size() - 1; i++)
+            for(int i = 0; i < discoveredVocabularies.size() - 1; i++)
             {
-                if(i < (discoveredVocabulariesDescription.size() - 2))
+                if(i < (discoveredVocabularies.size() - 2))
                 {
                     writer.write(discoveredVocabulariesDescription.get(i) + ":");
                 }
@@ -305,11 +330,14 @@ public class Vocab101TerminalBased
         {
             System.out.println(" You haven't learned any vocabulary");
         }
-        for(int i = 0; i < vocabulariesDescriptionLoaded.length - 1; i++)
+        if(vocabulariesDescriptionLoaded != null)
         {
-            System.out.println(" Vocab : " + vocabulariesDiscoveredLoaded[i]);
-            System.out.println(" " + vocabulariesDescriptionLoaded[i]);
-        }
+            for(int i = 0; i <= vocabulariesDescriptionLoaded.length - 1; i++)
+            {
+                System.out.println(" Vocab : " + vocabulariesDiscoveredLoaded[i]);
+                System.out.println(" " + vocabulariesDescriptionLoaded[i]);
+            }
+        }   
     }
     public static void LoadVocabAndDescriptionWithoutPrinting()
     {
