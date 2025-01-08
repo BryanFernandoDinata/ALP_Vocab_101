@@ -2,6 +2,8 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -26,6 +28,7 @@ public class Vocab101TerminalBased
     static char playAgain = 'Y';
 
     static int randomVocabIndex = -1;
+    static int quizIndex = 0;
 
     // saving to dictionary 
     static int mistakesMade = 0;
@@ -38,6 +41,9 @@ public class Vocab101TerminalBased
     static ArrayList<String> vocabulariesThatIsGuessedRight = new ArrayList<String>(); // vocabularies yang sudah di tebak dari definisinya bener saat quiz
 
     static String filePath = "discoveredVocabs.txt";
+
+    static float currentTimeLimit = 5f;
+    static float maxTimeLimit = 5f;
     
         
     public static void main(String[] args) throws ParseException, IOException
@@ -116,6 +122,7 @@ public class Vocab101TerminalBased
         if(whatPlayerType.equals(vocabularies[randomVocabIndex]))
         {
             PrintVocabDescription();
+
             discoveredVocabularies.add(vocabularies[randomVocabIndex]); 
             vocabulariesThatIsTypedRight.add(vocabularies[randomVocabIndex]);
         }
@@ -383,7 +390,7 @@ public class Vocab101TerminalBased
 
         String theAns = "";
 
-        for(int i = 0; i < vocabulariesThatIsTypedRight.size(); i++)
+        for(int i = quizIndex; i < vocabulariesThatIsTypedRight.size(); i++)
         {
             do
             {
@@ -395,6 +402,7 @@ public class Vocab101TerminalBased
                 System.out.print("Your answer : ");
                 theAns = s.next() + s.nextLine();
             }while(!theAns.equalsIgnoreCase(vocabulariesThatIsTypedRight.get(i)));
+            quizIndex++;
         }
     }
     public static void PrintQuizMenu()
@@ -411,5 +419,45 @@ public class Vocab101TerminalBased
         );
 
         System.out.println();
+    }
+    public static void StartTimer()
+    {
+        Thread timerThread = new Thread(() -> 
+        {
+            try 
+            {
+                TimerFunction();
+            } 
+            catch (InterruptedException e) 
+            {
+                Thread.currentThread().interrupt();
+                System.out.println("Timer interrupted");
+            }
+        });
+        timerThread.start();
+    }
+    public static void TimerFunction() throws InterruptedException 
+    {
+        long startTime = System.currentTimeMillis();
+
+        while (currentTimeLimit > 0 && !whatPlayerType.equals(vocabularies[randomVocabIndex])) 
+        {
+            TimeUnit.SECONDS.sleep(1);
+            long timePassed = System.currentTimeMillis() - startTime;
+            long secondsPassed = timePassed / 1000;
+
+            if (secondsPassed == 60) 
+            {
+                secondsPassed = 0;
+                startTime = System.currentTimeMillis();
+            }
+
+            if(!whatPlayerType.equals(vocabularies[randomVocabIndex]))
+            {
+                currentTimeLimit--;
+                System.out.print("\r Please type " + vocabularies[randomVocabIndex] + "(" + currentTimeLimit + ") s : ");
+                //System.out.print("\r Please type 'Mom' (" + currentTimeLimit + ") s : ");
+            }
+        }
     }
 }
